@@ -225,7 +225,7 @@ static CSteamNetworkConnectionBase *GetConnectionByHandleForAPI( HSteamNetConnec
 	return pResult;
 }
 
-static CSteamNetworkListenSocketBase *GetListenSocketByHandle( HSteamListenSocket sock )
+CSteamNetworkListenSocketBase *GetListenSocketByHandle( HSteamListenSocket sock )
 {
 	if ( sock == k_HSteamListenSocket_Invalid )
 		return nullptr;

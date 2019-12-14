@@ -1071,6 +1071,8 @@ enum ESteamNetworkingConfigValue
 	/// (This flag is itself a dev variable.)
 	k_ESteamNetworkingConfig_EnumerateDevVars = 35,
 
+	k_ESteamNetworkingConfig_ShareSocket = 37,
+
 	//
 	// Settings for SDR relayed connections
 	//

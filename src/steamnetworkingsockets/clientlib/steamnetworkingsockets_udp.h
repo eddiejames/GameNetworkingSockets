@@ -27,6 +27,8 @@ public:
 	/// Setup
 	bool BInit( const SteamNetworkingIPAddr &localAddr, int nOptions, const SteamNetworkingConfigValue_t *pOptions, SteamDatagramErrMsg &errMsg );
 
+	inline CSharedSocket *get_socket() { return m_pSock; }
+
 private:
 
 	/// The socket we are bound to.  We own this socket.
@@ -79,7 +81,7 @@ public:
 	IBoundUDPSocket *m_pSocket;
 
 	bool BConnect( const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg );
-	bool BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg );
+	bool BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg, bool bShared = false );
 
 	void SendConnectOK( SteamNetworkingMicroseconds usecNow );
 
