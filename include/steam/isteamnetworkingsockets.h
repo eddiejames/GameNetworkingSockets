@@ -703,6 +703,9 @@ public:
 	/// You don't need to call this if you are using Steam's callback dispatch
 	/// mechanism (SteamAPI_RunCallbacks and SteamGameserver_RunCallbacks).
 	virtual void RunCallbacks() = 0;
+
+	/// Send raw data on the socket to the specified address.
+	virtual void SendRawOnSocket(HSteamListenSocket hSocket, const SteamNetworkingIPAddr &addr, const void *pData, int cbData) = 0;
 protected:
 	~ISteamNetworkingSockets(); // Silence some warnings
 };

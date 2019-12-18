@@ -115,6 +115,7 @@ public:
 #endif
 
 	virtual void RunCallbacks() override;
+	virtual void SendRawOnSocket(HSteamListenSocket hSocket, const SteamNetworkingIPAddr &addr, const void *pData, int cbData) override;
 
 	/// Configuration options that will apply to all connections on this interface
 	ConnectionConfig m_connectionConfig;

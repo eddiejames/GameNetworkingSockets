@@ -82,6 +82,8 @@ public:
 	EHostedDedicatedServer m_eHostedDedicatedServer = k_EHostedDedicatedServer_Not;
 	#endif
 
+	CSharedSocket *GetSocket() override { return nullptr; }
+
 protected:
 	virtual ~CSteamNetworkListenSocketP2P();
 };

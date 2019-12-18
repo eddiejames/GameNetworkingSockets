@@ -1531,6 +1531,22 @@ void CSteamNetworkingSockets::RunCallbacks()
 	}
 }
 
+void CSteamNetworkingSockets::SendRawOnSocket(HSteamListenSocket hSocket, const SteamNetworkingIPAddr &addr, const void *pData, int cbData)
+{
+	CSteamNetworkListenSocketBase *sock = GetListenSocketByHandle(hSocket);
+
+	if (sock) {
+		CSharedSocket *skct = sock->GetSocket();
+
+		if (skct) {
+			netadr_t netadr;
+
+			SteamNetworkingIPAddrToNetAdr(netadr, addr);
+			skct->BSendRawPacket(pData, cbData, netadr);
+		}
+	}
+}
+
 void CSteamNetworkingSockets::InternalQueueCallback( int nCallback, int cbCallback, const void *pvCallback, void *fnRegisteredFunctionPtr )
 {
 	SteamNetworkingGlobalLock::AssertHeldByCurrentThread();
