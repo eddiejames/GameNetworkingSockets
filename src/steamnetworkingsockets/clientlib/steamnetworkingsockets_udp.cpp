@@ -1154,7 +1154,7 @@ bool CSteamNetworkConnectionUDP::BInitConnect( const SteamNetworkingIPAddr &addr
 		}
 	}
 	if (shared) {
-		if (!pTransport->BAccept(shared->get_socket(), netadrRemote, errMsg, true))
+		if (!pTransport->BAccept(shared->GetSocket(), netadrRemote, errMsg, true))
 		{
 			pTransport->TransportDestroySelfNow();
 			return false;

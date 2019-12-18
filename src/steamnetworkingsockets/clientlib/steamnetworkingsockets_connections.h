@@ -254,6 +254,8 @@ public:
 	CSteamNetworkPollGroup m_legacyPollGroup;
 	#endif
 
+	virtual CSharedSocket *GetSocket() = 0;
+
 protected:
 	CSteamNetworkListenSocketBase( CSteamNetworkingSockets *pSteamNetworkingSocketsInterface );
 	virtual ~CSteamNetworkListenSocketBase(); // hidden destructor, don't call directly.  Use Destroy()
