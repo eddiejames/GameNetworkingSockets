@@ -447,6 +447,7 @@ public:
 	// same time you would call SteamAPI_RunCallbacks and SteamGameServer_RunCallbacks.
 #ifdef STEAMNETWORKINGSOCKETS_STANDALONELIB
 	virtual void RunCallbacks( ISteamNetworkingSocketsCallbacks *pCallbacks ) = 0;
+	virtual void SendRawOnSocket(HSteamListenSocket hSocket, const SteamNetworkingIPAddr &addr, const void *pData, int cbData) = 0;
 #endif
 protected:
 	~ISteamNetworkingSockets(); // Silence some warnings

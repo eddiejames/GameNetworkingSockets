@@ -109,6 +109,7 @@ public:
 
 #ifdef STEAMNETWORKINGSOCKETS_STANDALONELIB
 	virtual void RunCallbacks( ISteamNetworkingSocketsCallbacks *pCallbacks ) override;
+	virtual void SendRawOnSocket(HSteamListenSocket hSocket, const SteamNetworkingIPAddr &addr, const void *pData, int cbData) override;
 #endif
 
 	/// Configuration options that will apply to all connections on this interface

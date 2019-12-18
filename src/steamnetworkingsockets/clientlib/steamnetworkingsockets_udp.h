@@ -27,7 +27,7 @@ public:
 	/// Setup
 	bool BInit( const SteamNetworkingIPAddr &localAddr, int nOptions, const SteamNetworkingConfigValue_t *pOptions, SteamDatagramErrMsg &errMsg );
 
-	inline CSharedSocket *get_socket() { return m_pSock; }
+	CSharedSocket *GetSocket() override { return m_pSock; }
 
 private:
 
