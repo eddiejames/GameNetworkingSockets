@@ -1396,6 +1396,9 @@ enum ESteamNetworkingConfigValue
 	/// ISteamNetworkingMessages.
 	k_ESteamNetworkingConfig_Callback_CreateConnectionSignaling = 206,
 
+	/// [global int32] The socket on which to initialize an outbound connection
+	k_ESteamNetworkingConfig_ShareSocket = 237,
+
 //
 // P2P connection settings
 //

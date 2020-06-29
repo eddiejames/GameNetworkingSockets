@@ -171,7 +171,7 @@ public:
 	IBoundUDPSocket *m_pSocket;
 
 	bool BConnect( const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg );
-	bool BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg );
+	bool BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg, bool bShared = false );
 
 	void SendConnectOK( SteamNetworkingMicroseconds usecNow );
 

@@ -2122,12 +2122,22 @@ void CSharedSocket::CloseRemoteHostByIndex( int idx )
 {
 	SteamNetworkingGlobalLock::AssertHeldByCurrentThread();
 
-	delete m_mapRemoteHosts[ idx ];
+	RemoteHost *rh = m_mapRemoteHosts[idx];
+
 	m_mapRemoteHosts[idx] = nullptr; // just for grins
 	m_mapRemoteHosts.RemoveAt( idx );
+
+	if (rh->m_bShared) {
+		if (rh->m_pOwner) {
+			rh->m_pOwner = nullptr;
+			return;
+		}
+	}
+
+	delete rh;
 }
 
-IBoundUDPSocket *CSharedSocket::AddRemoteHost( const netadr_t &adrRemote, CRecvPacketCallback callback )
+IBoundUDPSocket *CSharedSocket::AddRemoteHost( const netadr_t &adrRemote, CRecvPacketCallback callback, bool bShared )
 {
 	SteamNetworkingGlobalLock::AssertHeldByCurrentThread();
 
@@ -2136,7 +2146,7 @@ IBoundUDPSocket *CSharedSocket::AddRemoteHost( const netadr_t &adrRemote, CRecvP
 		AssertMsg1( false, "Already talking to %s on this shared socket, cannot add another remote host!", CUtlNetAdrRender( adrRemote ).String() );
 		return nullptr;
 	}
-	RemoteHost *pRemoteHost = new RemoteHost( m_pRawSock, adrRemote );
+	RemoteHost *pRemoteHost = new RemoteHost( m_pRawSock, adrRemote, bShared );
 	pRemoteHost->m_pOwner = this;
 	pRemoteHost->m_callback = callback;
 	m_mapRemoteHosts.Insert( adrRemote, pRemoteHost );
@@ -2148,16 +2158,23 @@ void CSharedSocket::RemoteHost::Close()
 {
 	SteamNetworkingGlobalLock::AssertHeldByCurrentThread();
 
-	int idx = m_pOwner->m_mapRemoteHosts.Find( m_adr );
-	if ( idx == m_pOwner->m_mapRemoteHosts.InvalidIndex() || m_pOwner->m_mapRemoteHosts[idx] != this )
-	{
-		AssertMsg( false, "CSharedSocket client table corruption!" );
-		delete this;
+	CSharedSocket *pOwner = m_pOwner;
+
+	if (pOwner) {
+		int idx = pOwner->m_mapRemoteHosts.Find(m_adr);
+		if (idx == pOwner->m_mapRemoteHosts.InvalidIndex() || pOwner->m_mapRemoteHosts[idx] != this)
+		{
+			AssertMsg(false, "CSharedSocket client table corruption!");
+			delete this;
+		}
+		else
+		{
+			m_pOwner = nullptr;
+			pOwner->CloseRemoteHostByIndex(idx);
+		}
 	}
 	else
-	{
-		m_pOwner->CloseRemoteHostByIndex( idx );
-	}
+		delete this;
 }
 
 /////////////////////////////////////////////////////////////////////////////

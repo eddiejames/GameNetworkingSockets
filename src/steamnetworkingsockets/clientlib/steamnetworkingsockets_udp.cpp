@@ -1067,10 +1067,10 @@ bool CConnectionTransportUDP::BConnect( const netadr_t &netadrRemote, SteamDatag
 	return true;
 }
 
-bool CConnectionTransportUDP::BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg )
+bool CConnectionTransportUDP::BAccept( CSharedSocket *pSharedSock, const netadr_t &netadrRemote, SteamDatagramErrMsg &errMsg, bool bShared )
 {
 	// Get an interface that is bound to talk to this address
-	m_pSocket = pSharedSock->AddRemoteHost( netadrRemote, CRecvPacketCallback( PacketReceived, this ) );
+	m_pSocket = pSharedSock->AddRemoteHost( netadrRemote, CRecvPacketCallback( PacketReceived, this ), bShared );
 	if ( !m_pSocket )
 	{
 		// This is really weird and shouldn't happen
@@ -1137,11 +1137,38 @@ bool CSteamNetworkConnectionUDP::BInitConnect( const SteamNetworkingIPAddr &addr
 	}
 
 	// Create transport.
+	CSteamNetworkListenSocketDirectUDP *shared = nullptr;
 	CConnectionTransportUDP *pTransport = new CConnectionTransportUDP( *this );
-	if ( !pTransport->BConnect( netadrRemote, errMsg ) )
-	{
-		pTransport->TransportDestroySelfNow();
-		return false;
+	for (int i = 0; i < nOptions; ++i) {
+		if (pOptions[i].m_eValue == k_ESteamNetworkingConfig_ShareSocket)
+		{
+			if (pOptions[i].m_eDataType == k_ESteamNetworkingConfig_Int32)
+			{
+				HSteamListenSocket socket_id = (HSteamListenSocket)pOptions[i].m_val.m_int32;
+				CSteamNetworkListenSocketBase *socket = GetListenSocketByHandle(socket_id);
+
+				if (socket)
+					shared = assert_cast<CSteamNetworkListenSocketDirectUDP *>(socket);
+			}
+
+			if (i == nOptions - 1)
+				nOptions--;
+			break;
+		}
+	}
+	if (shared) {
+		if (!pTransport->BAccept(shared->GetSocket(), netadrRemote, errMsg, true))
+		{
+			pTransport->TransportDestroySelfNow();
+			return false;
+		}
+	}
+	else {
+		if ( !pTransport->BConnect( netadrRemote, errMsg ) )
+		{
+			pTransport->TransportDestroySelfNow();
+			return false;
+		}
 	}
 	m_pTransport = pTransport;
 

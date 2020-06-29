@@ -984,6 +984,7 @@ extern CUtlHashMap<int, CSteamNetworkListenSocketBase *, std::equal_to<int>, Ide
 extern bool BCheckGlobalSpamReplyRateLimit( SteamNetworkingMicroseconds usecNow );
 extern CSteamNetworkConnectionBase *GetConnectionByHandle( HSteamNetConnection sock, ConnectionScopeLock &scopeLock );
 extern CSteamNetworkPollGroup *GetPollGroupByHandle( HSteamNetPollGroup hPollGroup, PollGroupScopeLock &scopeLock, const char *pszLockTag );
+extern CSteamNetworkListenSocketBase *GetListenSocketByHandle(HSteamListenSocket sock);
 
 inline CSteamNetworkConnectionBase *FindConnectionByLocalID( uint32 nLocalConnectionID, ConnectionScopeLock &scopeLock )
 {

@@ -316,7 +316,7 @@ inline CSteamNetworkConnectionBase *GetConnectionByHandleForAPI( HSteamNetConnec
 	return InternalGetConnectionByHandle( sock, scopeLock, pszLockTag, true );
 }
 
-static CSteamNetworkListenSocketBase *GetListenSocketByHandle( HSteamListenSocket sock )
+CSteamNetworkListenSocketBase *GetListenSocketByHandle( HSteamListenSocket sock )
 {
 	SteamNetworkingGlobalLock::AssertHeldByCurrentThread(); // listen sockets are protected by the global lock!
 	if ( sock == k_HSteamListenSocket_Invalid )
