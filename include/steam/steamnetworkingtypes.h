@@ -1343,6 +1343,7 @@ enum ESteamNetworkingConfigValue
 	/// initiated locally.  See: ISteamNetworkingSockets::ConnectP2P,
 	/// ISteamNetworkingMessages.
 	k_ESteamNetworkingConfig_Callback_CreateConnectionSignaling = 206,
+	k_ESteamNetworkingConfig_ShareSocket = 237,
 
 	//
 	// P2P settings

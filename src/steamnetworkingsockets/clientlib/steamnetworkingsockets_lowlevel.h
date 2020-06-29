@@ -186,7 +186,7 @@ public:
 
 	/// Add a client to talk to a given remote address.  Use IBoundUDPSocket::Close when you
 	/// are done.
-	IBoundUDPSocket *AddRemoteHost( const netadr_t &adrRemote, CRecvPacketCallback callback );
+	IBoundUDPSocket *AddRemoteHost( const netadr_t &adrRemote, CRecvPacketCallback callback, bool bShared = false );
 
 	/// Send a packet to a remove host.  It doesn't matter if the remote host
 	/// is in the client table a client already or not.
@@ -220,7 +220,8 @@ private:
 		inline virtual ~RemoteHost() {}
 	public:
 		STEAMNETWORKINGSOCKETS_DECLARE_CLASS_OPERATOR_NEW
-		inline RemoteHost( IRawUDPSocket *pRawSock, const netadr_t &adr ) : IBoundUDPSocket( pRawSock, adr ) {}
+		inline RemoteHost( IRawUDPSocket *pRawSock, const netadr_t &adr, bool bShared ) : IBoundUDPSocket( pRawSock, adr ), m_bShared(bShared) {}
+		bool m_bShared;
 		CRecvPacketCallback m_callback;
 		CSharedSocket *m_pOwner;
 		virtual void Close() OVERRIDE;
